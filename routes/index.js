@@ -7,5 +7,5 @@ export default app => {
   app.use('/mini-api/user', userRoutes)
   app.use('/mini-api/job', jobRoutes)
   app.use('/mini-api/company', companyRoutes)
-  app.use('/mini-api/file', commonRoutes)
+  app.use('/mini-api/common', commonRoutes)
 }

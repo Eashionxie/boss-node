@@ -19,7 +19,7 @@ exports.getComInfoById = (req, res) => {
 
 exports.addCom = (req, res) => {
   if (req.body._id) {
-    CompanyModel.findOneAndUpdate({ _id: req.body._id }, req.body, (err, data) => {
+    CompanyModel.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true }, (err, data) => {
       if (err) return res.send(formData(null, 500, err))
       res.send(formData(data, 200, '更新成功'))
     })

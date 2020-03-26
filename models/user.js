@@ -42,7 +42,20 @@ const userSchema = new Schema({
   language: String,
   email: String,
   gender: Number, // 性别：0 女；1 男
+  age: Number,
   tel: Number,
+  birthday: Number,
+  workDate: Number,
+  workExp: {
+    type: String,
+    enum: ['经验不限', '1-3年', '3-5年'],
+  },
+  eduLeve: {
+    type: String,
+    enum: ['学历不限', '初中', '中专/中技', '大专', '本科', '硕士']
+  },
+  discribe: String,
+  userWebSite: [],
   attachmentResumes: [ // 附件简历
     {
       name: String,
@@ -56,8 +69,11 @@ const userSchema = new Schema({
   ],
   jobofLooking: [
     {
-      jobType: Schema.Types.ObjectId,
-      jobName: String,
+      jobType: String,
+      jobTypeId: Schema.Types.ObjectId,
+      industry: {
+        type: Schema.Types.ObjectId
+      },
       city: String,
       minSalary: Number,
       maxSalary:Number
@@ -75,4 +91,5 @@ const userSchema = new Schema({
 })
 
 const UserModel = mongoose.model('User', userSchema)
+
 export default UserModel

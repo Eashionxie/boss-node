@@ -1,11 +1,15 @@
 import mongoose from './db'
 const Schema = mongoose.Schema
 
-const jobTypeSchema = new Schema({
-  typeId: Schema.Types.ObjectId,
-  typeName: String,
-  parentClassId: Schema.Types.ObjectId,
+let childSchema = new Schema({
+  childTypeName: String,
+  parentId: Schema.Types.ObjectId
 })
 
-const jobTypeModel = mongoose.model('Job', jobTypeSchema)
+const jobTypeSchema = new Schema({
+  typeName: String,
+  childTypes: [childSchema]
+})
+
+const jobTypeModel = mongoose.model('JobType', jobTypeSchema)
 export default jobTypeModel
