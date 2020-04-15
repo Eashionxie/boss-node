@@ -1,8 +1,10 @@
+import bcryptjs from 'bcryptjs'
 import UserModel from '../../models/user'
 import historySearchModel from '../../models/historySearch'
 import config from '../../common/config'
 import request from '../../common/request'
 import formData from '../../common/resForm'
+import sendAliMessage from '../common/messageServe'
 
 exports.getUserOpenid = (req, res) => {
   const urlStr = 'https://api.weixin.qq.com/sns/jscode2session'
@@ -37,7 +39,8 @@ exports.getUserSearchHistory = (req, res) => {
 }
 
 exports.postUserInfo = (req, res) => {
-  UserModel.find({ openId: req.body.openId }, (err, docs) =>{
+  let _openId = req.get('token') ? req.get('token') : req.body.openId
+  UserModel.find({ openId: _openId }, (err, docs) =>{
     if(err) return res.send(formData(null, 500, err))
     if (docs && docs.length) {
       UserModel.findOneAndUpdate({ openId: docs[0].openId }, req.body, { new: true }, (err, data) => {
@@ -55,14 +58,13 @@ exports.postUserInfo = (req, res) => {
 }
 
 exports.postUserSearchHistory = (req, res) => {
-  historySearchModel.find({ openId: req.body.openId }, (err, docs) =>{
+  historySearchModel.find({ openId: req.body.openId }, (err, docs) => {
     if(err) return res.send(formData(null, 500, err))
     if (docs && docs.length) {
       historySearchModel.findOneAndUpdate({ openId: docs[0].openId },{
         '$push': {
           historyList: { jobType: req.body.jobType }
-        },
-        new: true
+        }
       }, (err, data) => {
         if (err) return res.send(formData(null, 500, err))
         res.send(formData(data, 200, '更新成功'))
@@ -74,5 +76,26 @@ exports.postUserSearchHistory = (req, res) => {
         res.send(formData(data))
       })
     }
+  })
+}
+
+exports.userSignup = (req, res) => {
+  UserModel.find({ openId: req.openId }, (err, docs) => {
+    if(err) return res.send(formData(null, 500, err))
+    if(docs && docs.length) return res.send(formData('该手机号已注册', 500, '该手机号已被注册'))
+    sendAliMessage(req.openId).then(result => {
+      console.log(result)
+    })
+  })
+}
+
+exports.getUserInfoById = (req, res) => {
+  if (!req.get('token')) return res.send(formData(null, 500, '查询参数为空'))
+  UserModel.findOne({ openId: req.get('token') }, (err, data) => {
+    if (err) return res.send(formData(null, 500, '查询用户信息失败'))
+    if (!data) return res.send(formData(null, 500, '用户数据丢失'))
+    let _data = JSON.parse(JSON.stringify(data))
+    delete _data.userPassword
+    res.send(formData(_data))
   })
 }

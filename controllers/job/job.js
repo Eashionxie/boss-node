@@ -6,14 +6,16 @@ import formData from '../../common/resForm'
 import jobTypeModel from '../../models/job_type'
 
 exports.getJobList = (req, res) => {
-  const {current = 1, size = 10, keyWords = '', jobTypeId = ''} = req.query
+  const {current = 1, size = 10, keyWords = '', jobTypeId = '', companyId = ''} = req.query
   JobModel.countDocuments({
+    companyId: companyId ? companyId : null,
     $or: [
       { jobName: {'$regex': keyWords, $options: '$i'} }
     ]
   }, (errCount, count) => {
-    if (errCount) return res.send(formData(null, 500, err))
+    if (errCount) return res.send(formData(null, 500, errCount))
     JobModel.find({
+      companyId: companyId ? companyId : null,
       $or: [
         { jobName: {'$regex': keyWords, $options: '$i'} }
       ]
@@ -21,8 +23,8 @@ exports.getJobList = (req, res) => {
     .skip(Number((current - 1) * size))
     .limit(Number(size))
     .sort({ 'creatTime': -1 })
-    .populate('companyId')
-    .populate('publisherId')
+    .populate({ path: 'companyId', select: 'companyName companyShortDuce' })
+    .populate({ path: 'publisherId', select: 'nickName' })
     .exec((err, docs) => {
       if (err) return res.send(formData(null, 500, err))
       let sendData = { records: docs, current: current, total: count, size: 10 }
@@ -34,8 +36,8 @@ exports.getJobList = (req, res) => {
 exports.getJobInfoById = (req, res) => {
   if (!req.query.jobId) return res.send(formData(null, 500, '查询参数不能为空'))
   JobModel.findOne({ _id: req.query.jobId })
-  .populate('companyId')
-  .populate('publisherId')
+  .populate({ path: 'companyId', select: 'companyName' })
+  .populate({ path: 'publisherId', select: 'nickName' })
   .exec((err, data) => {
     if (err) return res.send(formData(null, 500, err))
     res.send(formData(data))
@@ -55,6 +57,14 @@ exports.addJob = (req, res) => {
       res.send(formData(data))
     })
   }
+}
+
+exports.deleteJob = (req, res) => {
+  if (!req.query._id) return res.send(formData(null, 500, 'id不能为空'))
+  JobModel.deleteOne({ _id: req.query._id }, (err, data) => {
+    if (err) return res.send(formData(null, 500, err))
+    res.send(formData(data))
+  })
 }
 
 exports.getJobTypes = (req, res) => {

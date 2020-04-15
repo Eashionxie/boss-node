@@ -3,7 +3,7 @@ import config from '../../common/config'
 import formData from '../../common/resForm'
 import wsUtils from './wsUtils'
 
-const wsServer = new ws.Server({ port: 80 })
+const wsServer = new ws.Server({ port: config.socketPort })
 
 wsServer.options.host = config.host
 

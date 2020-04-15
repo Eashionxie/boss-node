@@ -20,8 +20,8 @@ const companySchema = new Schema({
       }
     }
   ],
-  companyAdresses: [
-    {
+  companyAdress: {
+      addressName: String,
       fullAddress: String,
       shortAddress: String,
       latlng: {
@@ -29,19 +29,16 @@ const companySchema = new Schema({
         longitude: String
       },
       country: String,
-      provience: String,
+      province: String,
       city: String,
       area: String,
       street: String,
       building: String,
       No: String
-    }
-  ],
-  businessInfo: {
-    established: Date,
-    registeredCapital: Number, // 注册资金（单位万元）
-    legalRepresentative: String // 法人代表
   },
+  established: Number,
+  registeredCapital: Number, // 注册资金（单位万元）
+  legalRepresentative: String, // 法人代表
   officeWeb: String,
   products: [
     {

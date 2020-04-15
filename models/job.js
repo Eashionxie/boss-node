@@ -2,11 +2,19 @@ import mongoose from './db'
 const Schema = mongoose.Schema
 
 const jobSchema = new Schema({
+  companyInfo: {
+    type: Schema.Types.ObjectId,
+    ref: 'Company'
+  },
   companyId: {
     type: Schema.Types.ObjectId,
     ref: 'Company'
   },
-  jobTypeId: Schema.Types.ObjectId,
+  // jobTypeInfo: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'JobType'
+  // },
+  jobTypeId: String,
   jobName: String,
   city: String,
   minSalary: Number,
@@ -20,6 +28,10 @@ const jobSchema = new Schema({
     type: String,
     enum: ['学历不限', '初中', '中专/中技', '大专', '本科', '硕士']
   },
+  // publisherInfo: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'User'
+  // },
   publisherId: {
     type: Schema.Types.ObjectId,
     ref: 'User'
@@ -30,6 +42,11 @@ const jobSchema = new Schema({
     name: String,
     lat: String,
     lng: String
+  },
+  jobStatus: {
+    type: String,
+    enum: ['0', '1'], // 0:停止招聘； 1:在招
+    required: true
   },
   creatTime: {
     type: Date,

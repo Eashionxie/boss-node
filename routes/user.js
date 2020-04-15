@@ -7,5 +7,6 @@ router.get('/get-openid', userController.getUserOpenid)
 router.post('/post-user', userController.postUserInfo)
 router.get('/history-search', userController.getUserSearchHistory)
 router.post('/history-search-add', userController.postUserSearchHistory)
+router.get('/get-userInfo', userController.getUserInfoById)
 
 export default router

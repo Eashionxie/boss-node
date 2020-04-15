@@ -6,6 +6,7 @@ const router = express.Router()
 router.get('/get-job-list', jobController.getJobList)
 router.get('/get-jobInfo', jobController.getJobInfoById)
 router.post('/add-job', jobController.addJob)
+router.get('/del-job', jobController.deleteJob)
 router.post('/add-job-type', jobController.addJobType)
 router.get('/get-job-types', jobController.getJobTypes)
 

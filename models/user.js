@@ -7,7 +7,8 @@ const userSchema = new Schema({
     required: true
   },
   nickName: String, // 用户微信昵称
-  userName: String, // 用户姓名
+  userName: String, // 用户姓名,
+  userPassword: String,
   userType: {
     type: Number,
     validate: {
@@ -46,6 +47,7 @@ const userSchema = new Schema({
   tel: Number,
   birthday: Number,
   workDate: Number,
+  companyId: String,
   workExp: {
     type: String,
     enum: ['经验不限', '1-3年', '3-5年'],
@@ -55,7 +57,12 @@ const userSchema = new Schema({
     enum: ['学历不限', '初中', '中专/中技', '大专', '本科', '硕士']
   },
   discribe: String,
-  userWebSite: [],
+  userWebSite: [
+    {
+      webAddress: String,
+      createTime: { type: Date, default: Date.now }
+    }
+  ],
   attachmentResumes: [ // 附件简历
     {
       name: String,
