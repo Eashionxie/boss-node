@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@alicloud/pop-core": "^1.7.9",
-    "axios": "^0.19.2",
+    "axios": "^0.21.2",
     "babel": "^6.23.0",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.26.3",
